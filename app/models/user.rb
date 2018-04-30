@@ -9,4 +9,7 @@ class User < ApplicationRecord
 
   validates :name, presence: true
   validates :email, presence: true
+  has_many :messages
+  has_many :user_chat_rooms
+  has_many :chat_rooms, through: :user_chat_rooms
 end
