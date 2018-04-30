@@ -1,0 +1,7 @@
+<h1><%=@user.name%></h1>
+
+<ul>
+<% @user.chat_rooms.each do |cr| %>
+<li><%= link_to cr.name, chat_room_path(id: cr.id) %></li>
+<% end %>
+</ul>
