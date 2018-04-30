@@ -17,3 +17,46 @@ users = [
  ]
 
  User.create!(users)
+
+ chat_rooms = [
+ 	{name: 'Sport'},
+ 	{name: 'Politics'},
+ 	{name: 'Travel'},
+ 	{name: 'Technology'},
+ 	{name: 'Food'}
+ ]
+
+ChatRoom.create!(chat_rooms)
+
+User.all.each do |user| 
+	x = ChatRoom.all.shuffle 
+	random_chat = [x[0],x[1]]
+	user.chat_rooms << random_chat 
+end 
+
+messages = [
+	['blah'],
+	['hi'],
+	['array'],
+	['foo'],
+	['bar'],
+	['blah'],
+	['hi'],
+	['array'],
+	['foo'],
+	['bar']	
+]
+
+User.all.each do |user| 
+	user.chat_rooms.each do |cr| 
+		m = messages.shuffle
+		Message.create!(content: m[0], user: user, chat_room: cr)
+	end 
+end 
+
+
+
+
+
+
+
