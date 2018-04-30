@@ -14,7 +14,6 @@ users = [
  	{name: 'Dan Stein', email: 'dan@stein.com', password: 'pass123'},
  	{name: 'Izzy Oakley', email: 'izzy@oakley.com', password: 'pass123'},
  	{name: 'Ben Pirt', email: 'ben@pirt.com', password: 'pass123'}
-
  ]
 
  User.create!(users)
