@@ -34,18 +34,7 @@ User.all.each do |user|
 	user.chat_rooms << random_chat 
 end 
 
-messages = [
-	['blah'],
-	['hi'],
-	['array'],
-	['foo'],
-	['bar'],
-	['blah'],
-	['hi'],
-	['array'],
-	['foo'],
-	['bar']	
-]
+messages = ['blah','hi','array','foo','bar','blah','hi','array','foo','bar']
 
 User.all.each do |user| 
 	user.chat_rooms.each do |cr| 
