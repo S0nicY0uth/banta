@@ -12,6 +12,7 @@ class ChatRoomsController < ApplicationController
   def show
     @chat_room = ChatRoom.find(params[:id])
     @user = current_user
+    @message = Message.new
   end
 
   # GET /chat_rooms/new

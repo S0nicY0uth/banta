@@ -24,17 +24,21 @@ class MessagesController < ApplicationController
   # POST /messages
   # POST /messages.json
   def create
-    @message = Message.new(message_params)
+    @room = ChatRoom.find(params[:chat_room_id].to_i)
+    @user = current_user
+    @message = Message.create!(chat_room: @room, user: @user, content: params[:message][:content])
 
-    respond_to do |format|
-      if @message.save
-        format.html { redirect_to @message, notice: 'Message was successfully created.' }
-        format.json { render :show, status: :created, location: @message }
-      else
-        format.html { render :new }
-        format.json { render json: @message.errors, status: :unprocessable_entity }
-      end
-    end
+
+
+    # respond_to do |format|
+    #   if @message.save
+    #     format.html { redirect_to @message, notice: 'Message was successfully created.' }
+    #     format.json { render :show, status: :created, location: @message }
+    #   else
+    #     format.html { render :new }
+    #     format.json { render json: @message.errors, status: :unprocessable_entity }
+    #   end
+    # end
   end
 
   # PATCH/PUT /messages/1
@@ -72,3 +76,5 @@ class MessagesController < ApplicationController
       params.require(:message).permit(:content)
     end
 end
+
+
