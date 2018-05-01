@@ -1,3 +1,78 @@
 // Place all the styles related to the ChatRooms controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+
+@import 'vars';
+@import url('https://fonts.googleapis.com/css?family=Tajawal:400,500,700');
+
+body{
+    margin: 0px!important;
+}
+.logo{
+    position: absolute;
+    top: 30px;
+}
+
+.grid-container{
+    display: grid;
+    grid-template-columns: 120px auto;
+    grid-template-rows: 120px auto;
+    grid-template-areas: 'menu header'
+        'menu convo'
+        'menu message';
+}
+.header {
+    grid-area: header;
+    position: fixed;
+    height: 100px;
+    background-color: $off-grey;
+    width: 100%;
+    left: 125px;
+    height: 125px;
+}
+
+.header h1{
+    font-size: 40px;
+    font-family: 'Tajawal';
+    font-weight: 700;
+    color: $off-grey;
+}
+
+.nav {
+    grid-area: menu;
+    position: fixed;
+    top: 0px;
+    bottom: 0px;
+    background-color: #454552;
+    color: #d8e9ef;
+    width: 125px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+
+    ul {
+        list-style-type: none;
+        padding: 0px;
+    }
+}
+
+
+.convo {
+    grid-area: convo;
+    background-color: $off-grey;
+    top: 125px;
+    bottom: 100px;
+    position: absolute;
+    right: 0px;
+    left: 125px;
+}
+.message {
+    grid-area: message;
+    background-color: $blue;
+    position: absolute;
+    bottom: 0px;
+    height: 100px;
+    width: 100%;
+    left: 125px;
+}

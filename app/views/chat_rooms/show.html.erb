@@ -8,7 +8,9 @@
 <h3>Messages</h3>
 <ul>
   <% @chat_room.messages.each do |msg|%>
-  <li><strong><%= msg.user.name %></strong> - <%= msg.content %></li>
+    <li>
+      <strong><%= msg.user.name %></strong> - <%= msg.content %>
+    </li>
   <% end %>
 </ul>
 
