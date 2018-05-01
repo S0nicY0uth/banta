@@ -60,12 +60,16 @@ body{
 
 .convo {
     grid-area: convo;
-    background-color: $off-grey;
+    background-color: #d8e9ef;
     top: 125px;
     bottom: 100px;
     position: absolute;
     right: 0px;
     left: 125px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
 }
 .message {
     grid-area: message;
@@ -75,4 +79,25 @@ body{
     height: 100px;
     width: 100%;
     left: 125px;
+}
+
+.bubble {
+    padding: 10px 20px;
+    border: 1px solid $dark-grey;
+    border-radius: 5px;
+    position: relative;
+    margin-bottom: 10px;
+    align-self: flex-start;
+    display: flex;
+    flex-direction: column;
+}
+
+.bubble.current{
+    align-self: flex-end;
+    border: 1px solid $red;
+}
+
+.bubble span{
+    display: block;
+    font-weight: bold;
 }

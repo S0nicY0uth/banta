@@ -1,18 +1,33 @@
-<p id="notice"><%= notice %></p>
+<div class="grid-container">
+  <div class="header">
+  </div>
+  <div class="nav">
+    <div class="logo">
+        <h1>Banta</h1>
+    </div>
+    <h5>Channels</h5>
+    <ul>
+    <% @user.chat_rooms.each do |cr| %>
+        <li><%= link_to cr.name, chat_room_path(id: cr.id) %></li>
+    <% end %>
+    </ul>
+  </div>
+  <div class="convo">
+    <% @chat_room.messages.each do |m| %>
+    <% if m.user == current_user %>
+      <% class_bubble = 'bubble current' %>
+      <% else %>
+      <% class_bubble = "bubble" %>
+    <% end %>
+      <div class="<%= class_bubble %>">
+        <span class="username">
+          <%= m.user.name %> 
+        </span>
+        <%= m.content %>
+      </div>
+    <% end %>
+  </div>
+  <div class="message">
 
-<h1>
-  <strong>Name:</strong>
-  <%= @chat_room.name %>
-</h1>
-
-<h3>Messages</h3>
-<ul>
-  <% @chat_room.messages.each do |msg|%>
-    <li>
-      <strong><%= msg.user.name %></strong> - <%= msg.content %>
-    </li>
-  <% end %>
-</ul>
-
-<%= link_to 'Edit', edit_chat_room_path(@chat_room) %> |
-<%= link_to 'Back', chat_rooms_path %>
+  </div>
+</div>
