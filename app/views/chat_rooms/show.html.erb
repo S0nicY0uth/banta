@@ -27,7 +27,7 @@
         <%= m.content %>
       </div>
     <% end %>
-  </div>
+
   <div class="message">
   <%= form_for [@chat_room, @user, @message], url: chat_room_messages_path(@chat_room), message: @message,  html: {class: "nifty_form"}, :method => :POST do |f| %>
   <%= f.text_area :content, size: "60x12" %>
@@ -35,6 +35,9 @@
   <% end %>
 
   </div>
+
+  </div>
+
   
 </div>
 
