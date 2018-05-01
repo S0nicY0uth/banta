@@ -31,8 +31,16 @@
   <div class="message">
   <%= form_for [@chat_room, @user, @message], url: chat_room_messages_path(@chat_room), message: @message,  html: {class: "nifty_form"}, :method => :POST do |f| %>
   <%= f.text_area :content, size: "60x12" %>
-   <%= f.submit "Send", class: "submit-btn" %>
+   <%= f.submit "Godspeed!", class: "submit-btn" %>
   <% end %>
 
   </div>
+  
 </div>
+
+<script>
+  $(document).ready(function(){
+    var objDiv = document.querySelector(".convo");
+    objDiv.scrollTop = objDiv.scrollHeight;
+  });
+</script>

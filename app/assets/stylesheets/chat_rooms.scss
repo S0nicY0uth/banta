@@ -26,7 +26,7 @@ body{
     grid-area: header;
     position: fixed;
     height: 100px;
-    background-color: $off-grey;
+    background-color: #d8e9ef;
     width: 100%;
     left: 125px;
     height: 125px;
@@ -40,18 +40,18 @@ body{
 }
 
 .nav {
-   grid-area: menu;
-   position: fixed;
-   top: 0px;
-   bottom: 0px;
-   background-color: #454552;
-   color: #d8e9ef;
-   width: 125px;
-   display: flex;
-   justify-content: center;
-   align-items: center;
-   flex-direction: column;
-   z-index: 100;
+    grid-area: menu;
+    position: fixed;
+    top: 0px;
+    bottom: 0px;
+    background-color: #454552;
+    color: #d8e9ef;
+    width: 125px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    z-index: 100;
 
 
     ul {
@@ -62,34 +62,34 @@ body{
 
 
 .convo {
-   grid-area: convo;
-   background-color: #d8e9ef;
-   top: 125px;
-   bottom: 100px;
-   right: 0px;
-   left: 0px;
-   display: flex;
-   justify-content: center;
-   align-items: center;
-   flex-direction: column;
+    grid-area: convo;
+    background-color: #d8e9ef;
+    /* display: flex; */
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    position: relative;
+    overflow-y: scroll;
 }
 
 .message {
-   grid-area: message;
-   background-color: #4ea1d3;
-   position: absolute;
-   bottom: 0px;
-   height: 100px;
-   width: 100%;
-   /* left: 125px; */
+    grid-area: message;
+    background-color: #4ea1d3;
+    height: 100px;
+    width: 100%;
+    position: relative;
+
 
     .submit-btn{
         position: absolute;
         right: 0px;
-        background-color: $dark-grey;
+        background-color: #454552;
         display: inline-block;
         padding: 6px 12px;
         color: white;
+        width: 20%;
+        height: 100%;
+        font-size: 25px;
     }
     textarea{
         width: 80%;
@@ -99,18 +99,21 @@ body{
 
 .bubble {
     padding: 10px 20px;
-    border: 1px solid $dark-grey;
+    border: 1px solid #454552;
     border-radius: 5px;
     position: relative;
     margin-bottom: 10px;
     align-self: flex-start;
     display: flex;
     flex-direction: column;
+    width: 50%;
+    clear: both;
 }
 
 .bubble.current{
     align-self: flex-end;
     border: 1px solid $red;
+    float: right;
 }
 
 .bubble span{
