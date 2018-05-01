@@ -24,11 +24,11 @@ class MessagesController < ApplicationController
   # POST /messages
   # POST /messages.json
   def create
-    @room = ChatRoom.find(params[:chat_room_id].to_i)
+    @room = ChatRoom.find(params[:chat_room_id])
     @user = current_user
     @message = Message.create!(chat_room: @room, user: @user, content: params[:message][:content])
 
-
+    redirect_to chat_room_path(@room)
 
     # respond_to do |format|
     #   if @message.save
