@@ -3,8 +3,12 @@ class UsersController < ApplicationController
     end
 
     def home
+    	if user_signed_in?
         @user = current_user
         render :show, :layout => 'chat'
+      else 
+      	render :index 
+      end
     end
 
     def show

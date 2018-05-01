@@ -1,3 +1,4 @@
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 <div class="grid-container">
   <div class="header">
   </div>
@@ -28,6 +29,10 @@
     <% end %>
   </div>
   <div class="message">
+  <%= form_for [@chat_room, @user, @message], url: chat_room_messages_path(@chat_room), message: @message,  html: {class: "nifty_form"}, :method => :POST do |f| %>
+  <%= f.text_area :content, size: "60x12" %>
+   <%= f.submit "Send", class: "submit-btn" %>
+  <% end %>
 
   </div>
 </div>
