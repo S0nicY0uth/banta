@@ -1,7 +1,21 @@
-<h1><%=@user.name%></h1>
-
-<ul>
-<% @user.chat_rooms.each do |cr| %>
-<li><%= link_to cr.name, chat_room_path(id: cr.id) %></li>
-<% end %>
-</ul>
+<div class="grid-container">
+  <div class="header">
+  </div>
+  <div class="nav">
+    <div class="logo">
+        <h1>Banta</h1>
+    </div>
+    <h5>Channels</h5>
+    <ul>
+    <% @user.chat_rooms.each do |cr| %>
+        <li><%= link_to cr.name, chat_room_path(id: cr.id) %></li>
+    <% end %>
+    </ul>
+  </div>
+  <div class="convo">
+    convo
+  </div>
+  <div class="message">
+    message
+  </div>
+</div>
