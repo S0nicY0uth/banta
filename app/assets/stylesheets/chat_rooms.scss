@@ -17,7 +17,7 @@ body{
    display: grid;
    grid-template-columns: 120px auto;
    grid-template-rows: 120px auto;
-   grid-template-areas: 'menu header' 'menu convo' 'menu message';
+   grid-template-areas: 'menu convo' 'menu convo' 'menu convo';
    position: relative;
    height: 100vh;
 }
@@ -70,15 +70,18 @@ body{
     flex-direction: column;
     position: relative;
     overflow-y: scroll;
+    height: 100vh;
+    margin-bottom: 100px;
 }
 
 .message {
     grid-area: message;
-    background-color: #4ea1d3;
     height: 100px;
-    width: 100%;
-    position: relative;
-
+    /* width: 100%; */
+    position: fixed;
+    bottom: 0px;
+    right: 0px;
+    left: 125px;
 
     .submit-btn{
         position: absolute;
