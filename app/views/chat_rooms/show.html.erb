@@ -11,7 +11,7 @@
     <h5>Channels</h5>
     <ul>
     <% @chat_rooms.each do |cr| %>
-        <li><%= link_to cr.name, chat_room_path(id: cr.id) %></li>
+        <li <% if cr == @chat_room %>class="active" <% end %>><%= link_to cr.name, chat_room_path(id: cr.id) %></li>
     <% end %>
     </ul>
   </div>
@@ -31,8 +31,18 @@
 <script>
   $(document).ready(function(){
     scroll('.convo');
-    setTimeout(refresh, 2000);
+    setTimeout(refresh, 5000);
+    textAreaSize('.message textarea','.convo', '.message');
   });
+
+  function textAreaSize(textarea, conversation, message){
+    $(textarea).bind("click", function() {
+      $(message).addClass('on');
+    });
+    $(conversation).bind("click", function() {
+      $(message).removeClass('on');
+    });
+  }
 
   function scroll(div){
     var objDiv = document.querySelector(div);
@@ -49,6 +59,6 @@
         scroll('.convo');
       } 
     });
-    setTimeout(refresh, 2000);
-}
+    setTimeout(refresh, 5000);
+  }
 </script>
