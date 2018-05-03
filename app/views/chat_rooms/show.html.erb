@@ -6,11 +6,11 @@
    <p class="notice"><%= notice %></p>
   <p class= "alert"><%= alert %></p>
     <div class="logo">
-        <h1>Banta</h1>
+        <h1>Banta<span class="head-stop">.</span></h1>
     </div>
     <h5>Channels</h5>
     <ul>
-    <% @user.chat_rooms.each do |cr| %>
+    <% @chat_rooms.each do |cr| %>
         <li><%= link_to cr.name, chat_room_path(id: cr.id) %></li>
     <% end %>
     </ul>
@@ -40,14 +40,14 @@
   }
 
   function refresh() {
-    let message_time = $('.bubble').last().attr('sent-time');
-    console.log('last message in DOM ', message_time);
+    let message_time = $('.bubble').last().attr('sent-time'); 
     var chatid = <%= @chat_room.id %> 
+
     $.get('/chat_rooms/'+chatid+'/messages.html',function(response){
       $('.convo').html(response);
-      console.log('conversation replaced');
-      console.log(response);
-      scroll('.convo');
+      if (!$('.convo').is(":hover")) {
+        scroll('.convo');
+      } 
     });
     setTimeout(refresh, 2000);
 }

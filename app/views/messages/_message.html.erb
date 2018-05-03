@@ -1,4 +1,5 @@
 <div sent-time="<%= message.created_at.iso8601(6) %>" class="bubble<% if message.user == current_user %> current<% end %>">
     <span class="username"><%= message.user.name %></span>
+    <span class="time"><%= format_time(message) %></span>
     <%= message.content %>
 </div>
