@@ -33,6 +33,19 @@
     scroll('.convo');
     setTimeout(refresh, 5000);
     textAreaSize('.message textarea','.convo', '.message');
+
+    $(".message textarea").keypress(function(event) {
+
+      console.log(event.which)
+
+      if (event.which == 13) {
+          event.preventDefault();
+          $(".nifty_form").submit();
+        }
+    });
+
+
+
   });
 
   function textAreaSize(textarea, conversation, message){
