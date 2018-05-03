@@ -54,6 +54,10 @@ body{
     z-index: 100;
     text-align: center;
 
+    span.head-stop{
+        color: $red;
+    }
+
 
     ul {
         list-style-type: none;
@@ -82,6 +86,7 @@ body{
     overflow-y: scroll;
     height: 100vh;
     padding-bottom: 100px;
+    background-image: url('/images/bg.png')
 }
 
 .message {
@@ -96,7 +101,7 @@ body{
     .submit-btn{
         position: absolute;
         right: 0px;
-        background-color: #454552;
+        background-color: $red;
         display: inline-block;
         padding: 6px 12px;
         color: white;
@@ -107,6 +112,7 @@ body{
     textarea{
         width: 80%;
         height: 100px;
+        resize: none;
     }
 }
 
@@ -121,15 +127,29 @@ body{
     flex-direction: column;
     width: 50%;
     clear: both;
+    background-color: white;
+    margin-left: 13px;
+
+    span.username{
+        display: block;
+        font-weight: bold;
+    }
+
+    span.time {
+        position: absolute;
+        top: 5px;
+        right: 13px;
+        font-style: italic;
+
+    }
 }
 
 .bubble.current{
     align-self: flex-end;
-    border: 1px solid $red;
+    border: 3px solid #454552;
     float: right;
+    background-color: #eee;
+    margin-left: 0px;
+    margin-right: 13px;
 }
 
-.bubble span{
-    display: block;
-    font-weight: bold;
-}

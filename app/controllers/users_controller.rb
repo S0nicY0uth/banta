@@ -13,6 +13,7 @@ class UsersController < ApplicationController
 
     def show
       @user = User.find(params[:id])
+      @chat_rooms = ChatRoom.all
     end
 
 end
