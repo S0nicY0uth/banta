@@ -30,11 +30,14 @@
 
 <script>
   $(document).ready(function(){
-    var objDiv = document.querySelector(".convo");
-    objDiv.scrollTop = objDiv.scrollHeight;
-    // initial call, or just call refresh directly
+    scroll('.convo');
     setTimeout(refresh, 2000);
   });
+
+  function scroll(div){
+    var objDiv = document.querySelector(div);
+    objDiv.scrollTop = objDiv.scrollHeight;
+  }
 
   function refresh() {
     let message_time = $('.bubble').last().attr('sent-time');
@@ -44,6 +47,7 @@
       $('.convo').html(response);
       console.log('conversation replaced');
       console.log(response);
+      scroll('.convo');
     });
     setTimeout(refresh, 2000);
 }
