@@ -9,9 +9,12 @@
 body{
     margin: 0px!important;
 }
-.logo{
+.logo {
     position: absolute;
-    top: 30px;
+    top: 20px;
+    width: 100%;
+    background-color: $black;
+    padding: 10px 0px;
 }
 
 .grid-container {
@@ -59,9 +62,13 @@ body{
         color: $red;
     }
 
+    h1 {
+        margin: 0px;
+    }
+
     h5 {
         width: 100%;
-        background-color: #000000;
+        background-color: $black;
         padding: 10px;
         color: #d8e9ef;
         text-transform: uppercase;
@@ -117,7 +124,9 @@ body{
     overflow-y: scroll;
     height: 100vh;
     padding-bottom: 100px;
-    background-image: url('/images/background.png')
+    background-image: url('/images/background.png');
+    background-size: contain;
+    background-position: center;
 }
 
 .message {
@@ -161,7 +170,7 @@ body{
 
 .bubble {
     padding: 10px 20px;
-    border: 1px solid #454552;
+    // border: 1px solid #454552;
     border-radius: 5px;
     position: relative;
     margin-bottom: 5px;
@@ -190,9 +199,8 @@ body{
 
 .bubble.current{
     align-self: flex-end;
-    border: 3px solid #454552;
+    // border: 3px solid $off-grey;
     float: right;
-    background-color: #eee;
     margin-left: 0px;
     margin-right: 13px;
 }
