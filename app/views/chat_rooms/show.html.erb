@@ -42,6 +42,7 @@
     $.get('/chat_rooms/2/messages.html',function(response){
       $('.convo').html(response);
       console.log('conversation replaced');
+      console.log(response);
     });
     setTimeout(refresh, 2000);
 }
