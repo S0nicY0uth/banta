@@ -2,7 +2,7 @@ Rails.application.routes.draw do
   devise_for :users, :controllers => { registrations: 'registrations' }
   
   resources :chat_rooms do
-  	resources :messages
+  	resources :messages, only: [:create, :index]
   end
   
   resources :users

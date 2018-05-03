@@ -28,12 +28,21 @@ RSpec.describe ChatRoomsController, type: :controller do
   # This should return the minimal set of attributes required to create a valid
   # ChatRoom. As you add validations to ChatRoom, be sure to
   # adjust the attributes here as well.
+
+  let(:valid_user){
+    User.create!(name:'BigBadUser', email:'bigbademail@gmail.com', password: 'pass123')
+  }
+
+  before do 
+    sign_in valid_user
+  end
+
   let(:valid_attributes) {
-    skip("Add a hash of attributes valid for your model")
+    {name: 'Big Bad Chat Room'}
   }
 
   let(:invalid_attributes) {
-    skip("Add a hash of attributes invalid for your model")
+    {name: ''}
   }
 
   # This should return the minimal set of values that should be in the session
@@ -97,14 +106,14 @@ RSpec.describe ChatRoomsController, type: :controller do
   describe "PUT #update" do
     context "with valid params" do
       let(:new_attributes) {
-        skip("Add a hash of attributes valid for your model")
+        {name: 'New Name'}
       }
 
       it "updates the requested chat_room" do
         chat_room = ChatRoom.create! valid_attributes
         put :update, params: {id: chat_room.to_param, chat_room: new_attributes}, session: valid_session
         chat_room.reload
-        skip("Add assertions for updated state")
+        expect(chat_room.name).to eq 'New Name'
       end
 
       it "redirects to the chat_room" do

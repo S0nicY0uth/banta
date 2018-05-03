@@ -3,6 +3,8 @@
   <div class="header">
   </div>
   <div class="nav">
+   <p class="notice"><%= notice %></p>
+  <p class= "alert"><%= alert %></p>
     <div class="logo">
         <h1>Banta</h1>
     </div>
@@ -14,28 +16,13 @@
     </ul>
   </div>
   <div class="convo">
-    <% @chat_room.messages.each do |m| %>
-    <% if m.user == current_user %>
-      <% class_bubble = 'bubble current' %>
-      <% else %>
-      <% class_bubble = "bubble" %>
-    <% end %>
-      <div class="<%= class_bubble %>">
-        <span class="username">
-          <%= m.user.name %> 
-        </span>
-        <%= m.content %>
-      </div>
-    <% end %>
-
-  <div class="message">
-  <%= form_for [@chat_room, @user, @message], url: chat_room_messages_path(@chat_room), message: @message,  html: {class: "nifty_form"}, :method => :POST do |f| %>
-  <%= f.text_area :content, size: "60x12" %>
-   <%= f.submit "Godspeed!", class: "submit-btn" %>
-  <% end %>
-
+    <%= render partial: 'messages/message', collection: @chat_room.messages %>
   </div>
-
+    <div class="message">
+      <%= form_for [@chat_room, @user, @message], url: chat_room_messages_path(@chat_room), message: @message,  html: {class: "nifty_form"}, :method => :POST do |f| %>
+      <%= f.text_area :content, size: "60x12" %>
+      <%= f.submit "Godspeed!", class: "submit-btn" %>
+      <% end %>
   </div>
 
   
@@ -45,5 +32,17 @@
   $(document).ready(function(){
     var objDiv = document.querySelector(".convo");
     objDiv.scrollTop = objDiv.scrollHeight;
+    // initial call, or just call refresh directly
+    setTimeout(refresh, 2000);
   });
+
+  function refresh() {
+    let message_time = $('.bubble').last().attr('sent-time');
+    console.log('last message in DOM ', message_time);
+    $.get('/chat_rooms/2/messages.html',function(response){
+      $('.convo').html(response);
+      console.log('conversation replaced');
+    });
+    setTimeout(refresh, 2000);
+}
 </script>

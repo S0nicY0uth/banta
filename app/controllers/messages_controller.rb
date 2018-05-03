@@ -4,12 +4,19 @@ class MessagesController < ApplicationController
   # GET /messages
   # GET /messages.json
   def index
-    @messages = Message.all
+    @chat_room = ChatRoom.find(params[:chat_room_id])
+    @messages = @chat_room.messages.all
+
+    respond_to do |format|
+      format.html { render :index, layout:false }
+      format.json { render json: @messages}
+    end
   end
 
   # GET /messages/1
   # GET /messages/1.json
   def show
+
   end
 
   # GET /messages/new
@@ -24,11 +31,17 @@ class MessagesController < ApplicationController
   # POST /messages
   # POST /messages.json
   def create
-    @room = ChatRoom.find(params[:chat_room_id])
-    @user = current_user
-    @message = Message.create!(chat_room: @room, user: @user, content: params[:message][:content])
+      @chat_room = ChatRoom.find(params[:chat_room_id])
+      @user = current_user
+      @message = Message.new(chat_room: @chat_room, user: @user, content: params[:message][:content])
 
-    redirect_to chat_room_path(@room)
+      if @message.save
+        redirect_to chat_room_path(@chat_room)
+      else
+        flash[:notice] = "Unable to post message"
+        redirect_to chat_room_path(@chat_room)
+      end
+      
 
     # respond_to do |format|
     #   if @message.save
