@@ -13,6 +13,11 @@ class ChatRoomsController < ApplicationController
     @chat_room = ChatRoom.find(params[:id])
     @user = current_user
     @message = Message.new
+
+    respond_to do |format|
+        format.html { render :show }
+        format.json { render json: @chat_room.messages}
+    end
   end
 
   # GET /chat_rooms/new
