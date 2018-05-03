@@ -39,7 +39,8 @@
   function refresh() {
     let message_time = $('.bubble').last().attr('sent-time');
     console.log('last message in DOM ', message_time);
-    $.get('/chat_rooms/2/messages.html',function(response){
+    var chatid = <%= @chat_room.id %> 
+    $.get('/chat_rooms/'+chatid+'/messages.html',function(response){
       $('.convo').html(response);
       console.log('conversation replaced');
       console.log(response);
