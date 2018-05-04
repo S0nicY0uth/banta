@@ -5,7 +5,11 @@ class MessagesController < ApplicationController
   # GET /messages.json
   def index
     @chat_room = ChatRoom.find(params[:chat_room_id])
-    @messages = @chat_room.messages.all
+    if params[:since]
+      @messages = @chat_room.messages.where("created_at >?", Time.parse(params[:since]))
+    else
+      @messages = @chat_room.messages.all
+    end
 
     respond_to do |format|
       format.html { render :index, layout:false }
@@ -32,8 +36,7 @@ class MessagesController < ApplicationController
   # POST /messages.json
   def create
       @chat_room = ChatRoom.find(params[:chat_room_id])
-      @user = current_user
-      @message = Message.new(chat_room: @chat_room, user: @user, content: params[:message][:content])
+      @message = Message.new(chat_room: @chat_room, user: current_user, content: params[:content])
 
       if @message.save
         redirect_to chat_room_path(@chat_room)

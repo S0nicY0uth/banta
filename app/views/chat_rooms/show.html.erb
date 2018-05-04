@@ -19,7 +19,7 @@
     <%= render partial: 'messages/message', collection: @chat_room.messages %>
   </div>
     <div class="message">
-      <%= form_for [@chat_room, @user, @message], url: chat_room_messages_path(@chat_room), message: @message,  html: {class: "nifty_form"}, :method => :POST do |f| %>
+      <%= form_with url: chat_room_messages_path(@chat_room), html: {class: "nifty_form"}, :method => :POST, remote: true do |f| %>
       <%= f.text_area :content, size: "60x12" %>
       <%= f.submit "Godspeed!", class: "submit-btn" %>
       <% end %>
@@ -31,20 +31,17 @@
 <script>
   $(document).ready(function(){
     scroll('.convo');
-    setTimeout(refresh, 5000);
+    setInterval(refresh, 2000);
     textAreaSize('.message textarea','.convo', '.message');
 
     $(".message textarea").keypress(function(event) {
 
-      console.log(event.which)
-
       if (event.which == 13) {
-          event.preventDefault();
-          $(".nifty_form").submit();
+          event.preventDefault();         
+          Rails.fire(document.querySelector(".nifty_form"), 'submit');
+          document.querySelector(".message textarea").value = "";
         }
     });
-
-
 
   });
 
@@ -63,15 +60,15 @@
   }
 
   function refresh() {
-    let message_time = $('.bubble').last().attr('sent-time'); 
+    let last_message = $('.bubble').last().attr('sent-time'); 
     var chatid = <%= @chat_room.id %> 
 
-    $.get('/chat_rooms/'+chatid+'/messages.html',function(response){
-      $('.convo').html(response);
+    $.get('/chat_rooms/'+chatid+'/messages.html?since='+last_message, function(response){ 
+      $('.convo').append(response);
       if (!$('.convo').is(":hover")) {
         scroll('.convo');
       } 
     });
-    setTimeout(refresh, 5000);
+    // setTimeout(refresh, 5000);
   }
 </script>
