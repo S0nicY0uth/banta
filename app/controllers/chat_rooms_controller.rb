@@ -10,14 +10,18 @@ class ChatRoomsController < ApplicationController
   # GET /chat_rooms/1
   # GET /chat_rooms/1.json
   def show
-    @chat_rooms = ChatRoom.all
-    @chat_room = ChatRoom.find(params[:id])
-    @user = current_user
-    @message = Message.new
+    if current_user
+      @chat_rooms = ChatRoom.all
+      @chat_room = ChatRoom.find(params[:id])
+      @user = current_user
+      @message = Message.new
 
-    respond_to do |format|
-        format.html { render :show }
-        format.json { render json: @chat_room.messages}
+      respond_to do |format|
+          format.html { render :show }
+          format.json { render json: @chat_room.messages}
+      end
+    else
+      redirect_to new_user_session_path
     end
   end
 

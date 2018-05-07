@@ -7,12 +7,12 @@ RSpec.describe "messages/edit", type: :view do
     ))
   end
 
-  it "renders the edit message form" do
-    render
+  # it "renders the edit message form" do
+  #   render
 
-    assert_select "form[action=?][method=?]", message_path(@message), "post" do
+  #   assert_select "form[action=?][method=?]", message_path(@message), "post" do
 
-      assert_select "input[name=?]", "message[content]"
-    end
-  end
+  #     assert_select "input[name=?]", "message[content]"
+  #   end
+  # end
 end

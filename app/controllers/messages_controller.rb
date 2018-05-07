@@ -4,12 +4,8 @@ class MessagesController < ApplicationController
   # GET /messages
   # GET /messages.json
   def index
-    @chat_room = ChatRoom.find(params[:chat_room_id])
-    if params[:since]
-      @messages = @chat_room.messages.where("created_at >?", Time.parse(params[:since]))
-    else
-      @messages = @chat_room.messages.all
-    end
+    @chat_room = ChatRoom.find(params[:chat_room_id])  
+    @messages = @chat_room.messages.all
 
     respond_to do |format|
       format.html { render :index, layout:false }
@@ -25,7 +21,7 @@ class MessagesController < ApplicationController
 
   # GET /messages/new
   def new
-    @message = Message.new
+    # @message = Message.new
   end
 
   # GET /messages/1/edit
@@ -61,37 +57,25 @@ class MessagesController < ApplicationController
   # PATCH/PUT /messages/1
   # PATCH/PUT /messages/1.json
   def update
-    respond_to do |format|
-      if @message.update(message_params)
-        format.html { redirect_to @message, notice: 'Message was successfully updated.' }
-        format.json { render :show, status: :ok, location: @message }
-      else
-        format.html { render :edit }
-        format.json { render json: @message.errors, status: :unprocessable_entity }
-      end
-    end
+  
   end
 
   # DELETE /messages/1
   # DELETE /messages/1.json
   def destroy
-    @message.destroy
-    respond_to do |format|
-      format.html { redirect_to messages_url, notice: 'Message was successfully destroyed.' }
-      format.json { head :no_content }
-    end
+    
   end
 
-  private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_message
-      @message = Message.find(params[:id])
-    end
+  # private
+  #   # Use callbacks to share common setup or constraints between actions.
+  #   def set_message
+  #     @message = Message.find(params[:id])
+  #   end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def message_params
-      params.require(:message).permit(:content)
-    end
+  #   # Never trust parameters from the scary internet, only allow the white list through.
+  #   def message_params
+  #     params.require(:message).permit(:content)
+  #   end
 end
 
 
