@@ -47,6 +47,9 @@ group :development, :test do
   gem 'rspec-rails', '~> 3.7'
   gem 'shoulda-matchers'
   gem 'simplecov', require: false
+  gem 'rails-controller-testing'
+  gem 'capybara', '~> 2.7', '>= 2.7.1'
+  gem 'selenium-webdriver'
 end
 
 group :development do

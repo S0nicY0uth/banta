@@ -1,22 +1,36 @@
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 <div class="grid-container">
-  <div class="header">
-  </div>
+  <div class="header"></div>
   <div class="nav">
+
+    <p class="notice"><%= notice %></p>
+    <p class= "alert"><%= alert %></p>
+    
     <div class="logo">
-        <h1>Banta</h1>
+        <h1>Banta<span class="head-stop">.</span></h1>
     </div>
+    
     <h5>Channels</h5>
+    
     <ul>
-    <% @user.chat_rooms.each do |cr| %>
-        <li><%= link_to cr.name, chat_room_path(id: cr.id) %></li>
+    <% @chat_rooms.each do |cr| %>
+        <li <% if cr == @chat_room %>class="active" <% end %>><%= link_to cr.name, chat_room_path(id: cr.id) %></li>
     <% end %>
     </ul>
+    <div class="destroy">
+      <%= link_to('Logout', destroy_user_session_path,  :method=>'delete') %>
+    </div>
   </div>
-  <div class="convo">
-    Choose a chat room 
+  
+  <div class="convo index">
+    <h3>Please choose a chat room from the left hand side</h3>
+  </div>
+  
+  
+  <div class="message">
     
   </div>
-  <div class="message">
-    message
-  </div>
+
+  
 </div>
+
