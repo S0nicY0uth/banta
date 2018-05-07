@@ -29,5 +29,9 @@ module Banta
 
     # Don't generate system test files.
     config.generators.system_tests = nil
+    config.action_cable.mount_path = '/cable'
+    config.generators do |g|
+      g.javascript_engine :js
+    end
   end
 end
