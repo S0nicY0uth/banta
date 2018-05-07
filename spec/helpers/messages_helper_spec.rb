@@ -11,5 +11,11 @@ require 'rails_helper'
 #   end
 # end
 RSpec.describe MessagesHelper, type: :helper do
-  pending "add some examples to (or delete) #{__FILE__}"
+  describe '#format_time' do
+    it "should output the right time" do
+      time = Time.parse('2018-04-30T18:42:31.936787Z')
+      msg = Message.new(created_at: time)
+      expect(helper.format_time(msg)).to eq 'Mon 06:42'
+    end
+  end
 end
