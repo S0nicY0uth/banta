@@ -1,0 +1,86 @@
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+<div class="grid-container">
+  <div class="nav">    
+    <div class="logo">
+     <h1>Banta<span class="head-stop">.</span></h1>
+    </div>
+    <h5>Channels</h5>
+    <ul>
+    </ul>
+  </div>
+		<div class="convo">
+		</div>
+		<div class="message">
+		</div>
+</div>
+
+<script>
+
+class RoomList {
+	constructor(el){
+		this.el = el;
+		this.linksNeeded = true;
+		this.getRooms([this.refreshRoomList.bind(this), this.render.bind(this)])
+	}
+
+	getRooms(fn){
+		fetch('/chat_rooms.json')
+		.then(function(response) {
+			return response.json();
+		})
+		.then(function(json) {
+			console.log(json, 'this is the returned json data');
+			for(let i =0; i < fn.length; i++){
+				fn[i](json);
+			}
+			//if we're running for the first time. 
+			if (this.linksNeeded) {
+				this.addLinks(json);
+			}
+
+		}.bind(this))
+		.catch(function(err) {
+			console.log('Fetch Error :-S', err);
+		});
+	}
+
+	refreshRoomList(roomList){
+		this.roomList = roomList;
+	}
+
+	addLinks(json){
+		console.log('yeaaaaahhhah mofo');
+
+		for (let i = 0; i < json.length; i++){
+			console.log(json[i]);
+
+			document.getElementByID(json[i].id).addEventListener('click', function(){
+
+			});
+		}
+
+		this.linksNeeded = false; 
+	}
+
+
+	render(roomList){
+		var target = document.querySelector(this.el + ' ul');
+
+		for(let i =0; i < roomList.length; i ++){
+			var li = document.createElement('li');
+			var a = document.createElement('a');
+			a.textContent = roomList[i].name;
+			a.id = roomList[i].id;
+			li.appendChild(a);
+			target.appendChild(li);
+		}
+	}
+
+}
+
+document.addEventListener("DOMContentLoaded", function(event) {
+	rooms = new RoomList('.nav');
+	//rooms.addLinks();
+	});
+
+</script>

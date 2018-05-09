@@ -5,6 +5,11 @@ class ChatRoomsController < ApplicationController
   # GET /chat_rooms.json
   def index
     @chat_rooms = ChatRoom.all
+
+    respond_to do |format|
+      format.html { render :index }
+      format.json { render json: @chat_rooms}
+    end
   end
 
   # GET /chat_rooms/1

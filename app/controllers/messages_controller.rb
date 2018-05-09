@@ -36,7 +36,7 @@ class MessagesController < ApplicationController
 
       if @message.save
         @message.push_message(current_user)
-        redirect_to chat_room_path(@chat_room)
+        # redirect_to chat_room_path(@chat_room)
       else
         flash[:notice] = "Unable to post message"
         redirect_to chat_room_path(@chat_room)
