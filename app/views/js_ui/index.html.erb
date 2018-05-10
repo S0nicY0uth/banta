@@ -16,71 +16,147 @@
 
 <script>
 
-class RoomList {
-	constructor(el){
-		this.el = el;
-		this.linksNeeded = true;
-		this.getRooms([this.refreshRoomList.bind(this), this.render.bind(this)])
+class App {
+	constructor(options){
+		this.init();
+		this.nav = options.nav
+		this.msgContainer = options.msgContainer;
+		this.user = {id: "<%= current_user.id.to_s %>", name:"<%= current_user.name.to_s %>"};
 	}
 
-	getRooms(fn){
+	init(){
+		this.roomList = new RoomList(() => {
+			console.log("RoomList is ready");
+			this.initMessages();
+			this.setRoom(this.roomList.list, 0);
+			this.roomList.render(this.nav);
+			this.roomList.list.forEach(function(room){
+				document.getElementById(room.id).addEventListener('click',function(e){
+					this.messages = new Messages(e.target.id,()=>{
+						console.log(this.messages);
+						document.querySelector(this.msgContainer).innerHTML = '';
+						this.messages.render(this.msgContainer,this.user);
+					});
+				}.bind(this));
+			}.bind(this));
+		})
+	}
+
+	initMessages(){
+		console.log(this.roomList.list)
+	}
+
+	setRoom(roomList, index){
+		this.currentRoom = roomList[index];
+	}
+
+}
+
+class RoomList {
+	constructor(cb){
+		this.getRooms(cb);
+	}
+
+	setRoomList(roomList){
+		this.list = roomList;
+	}
+
+	getRooms(cb){
 		fetch('/chat_rooms.json')
 		.then(function(response) {
 			return response.json();
 		})
 		.then(function(json) {
 			console.log(json, 'this is the returned json data');
-			for(let i =0; i < fn.length; i++){
-				fn[i](json);
-			}
-			//if we're running for the first time. 
-			if (this.linksNeeded) {
-				this.addLinks(json);
-			}
-
+			this.setRoomList(json);
+			cb(json);
 		}.bind(this))
 		.catch(function(err) {
 			console.log('Fetch Error :-S', err);
 		});
 	}
 
-	refreshRoomList(roomList){
-		this.roomList = roomList;
-	}
-
-	addLinks(json){
-		console.log('yeaaaaahhhah mofo');
-
-		for (let i = 0; i < json.length; i++){
-			console.log(json[i]);
-
-			document.getElementByID(json[i].id).addEventListener('click', function(){
-
-			});
-		}
-
-		this.linksNeeded = false; 
-	}
-
-
-	render(roomList){
-		var target = document.querySelector(this.el + ' ul');
-
-		for(let i =0; i < roomList.length; i ++){
+	render(el){
+		var target = document.querySelector(el + ' ul');
+		for(let i =0; i < this.list.length; i ++){
 			var li = document.createElement('li');
 			var a = document.createElement('a');
-			a.textContent = roomList[i].name;
-			a.id = roomList[i].id;
+			a.textContent = this.list[i].name;
+			a.id = this.list[i].id;
 			li.appendChild(a);
 			target.appendChild(li);
 		}
 	}
 
+
 }
 
+class Messages {
+	constructor(room_id, cb){
+		this.current_room_id = room_id;
+		this.getMessages(cb);
+	}
+	getMessages(cb){
+		fetch('/chat_rooms/'+ this.current_room_id +'/messages.json')
+		.then(function(response) {
+			return response.json();
+		})
+		.then(function(json) {
+			this.refreshMessageList(json)
+			cb();
+		}.bind(this))
+		.catch(function(err) {
+			console.log('Fetch Error :-S', err);
+		});
+	}
+
+	refreshMessageList(data){
+		this.messageList = data
+	}
+
+	render(el,user){
+		let target = document.querySelector(el);
+		this.messageList.forEach(function(msg){
+			let bubble = document.createElement('div');
+			let userSpan = document.createElement('span');
+			let timeSpan = document.createElement('span');
+			
+			this.bubbleDirection(bubble,msg.user_id, user.id);
+
+			bubble.setAttribute('sent-time', msg.created_at);
+			bubble.textContent = msg.content;
+
+			userSpan.className = "username";
+			timeSpan.className = "time";
+
+			userSpan.textContent = msg.user_id;
+			timeSpan.textContent = moment(msg.created_at).format('ddd HH:mm');
+			
+
+			bubble.prepend(userSpan);
+			bubble.prepend(timeSpan);
+			target.append(bubble);
+
+		}.bind(this));
+	}
+
+	bubbleDirection(div,msg_u_id, current_user_id){
+		//determines whether the message being rendered was sent by the current user. 
+		if (msg_u_id == current_user_id){
+				div.className = "bubble current";
+			} else {
+				div.className = "bubble";
+			}
+		return div;
+	}
+
+
+}
+
+app = new App({nav: '.nav', msgContainer:'.convo'});
+
 document.addEventListener("DOMContentLoaded", function(event) {
-	rooms = new RoomList('.nav');
-	//rooms.addLinks();
-	});
+	
+});
 
 </script>
