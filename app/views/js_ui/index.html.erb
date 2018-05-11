@@ -16,24 +16,28 @@
 
 <script>
 
+
 class App {
 	constructor(options){
 		this.init();
-		this.nav = options.nav
+		this.nav = options.nav;
 		this.msgContainer = options.msgContainer;
 		this.user = {id: "<%= current_user.id.to_s %>", name:"<%= current_user.name.to_s %>"};
+		this.message_area = options.message_area;
 	}
 
 	init(){
 		this.roomList = new RoomList(() => {
-			console.log("RoomList is ready");
-			this.initMessages();
+			this.renderSearchBar(this.message_area, this.roomList.list[0].id);
 			this.setRoom(this.roomList.list, 0);
 			this.roomList.render(this.nav);
 			this.roomList.list.forEach(function(room){
 				document.getElementById(room.id).addEventListener('click',function(e){
+					this.setRoom(this.roomList.list, e.target.getAttribute('index'));
+					this.renderSearchBar(this.message_area,this.currentRoom.id);
+					this.searchHandler(this.message_area,this.currentRoom.id);
+					this.actionCableInit(this.currentRoom.id);
 					this.messages = new Messages(e.target.id,()=>{
-						console.log(this.messages);
 						document.querySelector(this.msgContainer).innerHTML = '';
 						this.messages.render(this.msgContainer,this.user);
 					});
@@ -42,8 +46,53 @@ class App {
 		})
 	}
 
-	initMessages(){
-		console.log(this.roomList.list)
+	actionCableInit(id){
+		message_subscription(id);
+	}
+
+	renderSearchBar(el, current_room){
+		let target = document.querySelector(el);
+		target.innerHTML = '';
+		let form = document.createElement('form');
+		let submit = document.createElement('input');
+		let textarea = document.createElement('textarea');
+
+		submit.setAttribute('type','submit');
+		submit.setAttribute('value','Godspeed!');
+		submit.className = "submit-btn";
+
+		textarea.id = "content";
+		textarea.name = "content";
+		form.append(textarea);
+
+		form.className = 'nifty_form';
+		form.setAttribute('data-remote','true');
+		form.setAttribute('action','/chat_rooms/'+ current_room +'/messages');
+		form.append(submit);
+
+
+		target.append(form);
+	}
+
+	searchHandler(el,current_room){
+		let form = document.querySelector(el + ' form');
+
+		form.addEventListener('submit',function(e){
+			e.preventDefault();
+			let data = {content: document.getElementById('content').value}
+			var xhr = new XMLHttpRequest();
+			let token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+			xhr.open('POST', '/chat_rooms/'+ current_room +'/messages.json');
+			xhr.setRequestHeader('Content-Type', 'application/json');
+			xhr.setRequestHeader('X-CSRF-Token', token);
+			xhr.onload = function() {
+				if (xhr.status === 200) {
+					var userInfo = JSON.parse(xhr.responseText);
+				}
+			};
+			xhr.send(JSON.stringify(data));
+
+		});
 	}
 
 	setRoom(roomList, index){
@@ -83,6 +132,9 @@ class RoomList {
 			var a = document.createElement('a');
 			a.textContent = this.list[i].name;
 			a.id = this.list[i].id;
+			a.setAttribute('index', i);
+			a.setAttribute('href', '#'+this.list[i].name);
+
 			li.appendChild(a);
 			target.appendChild(li);
 		}
@@ -129,7 +181,7 @@ class Messages {
 			userSpan.className = "username";
 			timeSpan.className = "time";
 
-			userSpan.textContent = msg.user_id;
+			userSpan.textContent = msg.user_name;
 			timeSpan.textContent = moment(msg.created_at).format('ddd HH:mm');
 			
 
@@ -153,7 +205,7 @@ class Messages {
 
 }
 
-app = new App({nav: '.nav', msgContainer:'.convo'});
+app = new App({nav: '.nav', msgContainer:'.convo',message_area: '.message'});
 
 document.addEventListener("DOMContentLoaded", function(event) {
 	

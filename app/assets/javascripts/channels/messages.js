@@ -1,5 +1,5 @@
 function message_subscription(room){
-  App.messages = App.cable.subscriptions.create({channel: "MessagesChannel", room: room}, {
+  AppCable.messages = AppCable.cable.subscriptions.create({channel: "MessagesChannel", room: room}, {
     connected: function() {
       console.log('connected');
     },
