@@ -9,7 +9,7 @@ class MessagesController < ApplicationController
 
     respond_to do |format|
       format.html { render :index, layout:false }
-      format.json { render json: @messages}
+      format.json
     end
   end
 
@@ -33,25 +33,23 @@ class MessagesController < ApplicationController
   def create
       @chat_room = ChatRoom.find(params[:chat_room_id])
       @message = Message.new(chat_room: @chat_room, user: current_user, content: params[:content])
-
-      if @message.save
-        @message.push_message(current_user)
-        redirect_to chat_room_path(@chat_room)
-      else
-        flash[:notice] = "Unable to post message"
-        redirect_to chat_room_path(@chat_room)
-      end
       
 
-    # respond_to do |format|
-    #   if @message.save
-    #     format.html { redirect_to @message, notice: 'Message was successfully created.' }
-    #     format.json { render :show, status: :created, location: @message }
-    #   else
-    #     format.html { render :new }
-    #     format.json { render json: @message.errors, status: :unprocessable_entity }
-    #   end
-    # end
+    respond_to do |format|
+      if @message.save
+
+        @message.push_message(current_user)
+
+        format.html { redirect_to @message, notice: 'Message was successfully created.' }
+        format.json { head :created }
+      else
+        format.html { 
+          flash[:notice] = "Unable to post message"
+          redirect_to chat_room_path(@chat_room)
+          }
+        format.json { render json: @message.errors, status: :unprocessable_entity }
+      end
+    end
   end
 
   # PATCH/PUT /messages/1

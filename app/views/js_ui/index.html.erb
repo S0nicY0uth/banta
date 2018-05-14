@@ -1,0 +1,214 @@
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+<div class="grid-container">
+  <div class="nav">    
+    <div class="logo">
+     <h1>Banta<span class="head-stop">.</span></h1>
+    </div>
+    <h5>Channels</h5>
+    <ul>
+    </ul>
+  </div>
+		<div class="convo">
+		</div>
+		<div class="message">
+		</div>
+</div>
+
+<script>
+
+
+class App {
+	constructor(options){
+		this.init();
+		this.nav = options.nav;
+		this.msgContainer = options.msgContainer;
+		this.user = {id: "<%= current_user.id.to_s %>", name:"<%= current_user.name.to_s %>"};
+		this.message_area = options.message_area;
+	}
+
+	init(){
+		this.roomList = new RoomList(() => {
+			this.renderSearchBar(this.message_area, this.roomList.list[0].id);
+			this.setRoom(this.roomList.list, 0);
+			this.roomList.render(this.nav);
+			this.roomList.list.forEach(function(room){
+				document.getElementById(room.id).addEventListener('click',function(e){
+					this.setRoom(this.roomList.list, e.target.getAttribute('index'));
+					this.renderSearchBar(this.message_area,this.currentRoom.id);
+					this.searchHandler(this.message_area,this.currentRoom.id);
+					this.actionCableInit(this.currentRoom.id);
+					this.messages = new Messages(e.target.id,()=>{
+						document.querySelector(this.msgContainer).innerHTML = '';
+						this.messages.render(this.msgContainer,this.user);
+					});
+				}.bind(this));
+			}.bind(this));
+		})
+	}
+
+	actionCableInit(id){
+		message_subscription(id);
+	}
+
+	renderSearchBar(el, current_room){
+		let target = document.querySelector(el);
+		target.innerHTML = '';
+		let form = document.createElement('form');
+		let submit = document.createElement('input');
+		let textarea = document.createElement('textarea');
+
+		submit.setAttribute('type','submit');
+		submit.setAttribute('value','Godspeed!');
+		submit.className = "submit-btn";
+
+		textarea.id = "content";
+		textarea.name = "content";
+		form.append(textarea);
+
+		form.className = 'nifty_form';
+		form.setAttribute('data-remote','true');
+		form.setAttribute('action','/chat_rooms/'+ current_room +'/messages');
+		form.append(submit);
+
+
+		target.append(form);
+	}
+
+	searchHandler(el,current_room){
+		let form = document.querySelector(el + ' form');
+
+		form.addEventListener('submit',function(e){
+			e.preventDefault();
+			let data = {content: document.getElementById('content').value}
+			var xhr = new XMLHttpRequest();
+			let token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+			xhr.open('POST', '/chat_rooms/'+ current_room +'/messages.json');
+			xhr.setRequestHeader('Content-Type', 'application/json');
+			xhr.setRequestHeader('X-CSRF-Token', token);
+			xhr.onload = function() {
+				if (xhr.status === 200) {
+					var userInfo = JSON.parse(xhr.responseText);
+				}
+			};
+			xhr.send(JSON.stringify(data));
+
+		});
+	}
+
+	setRoom(roomList, index){
+		this.currentRoom = roomList[index];
+	}
+
+}
+
+class RoomList {
+	constructor(cb){
+		this.getRooms(cb);
+	}
+
+	setRoomList(roomList){
+		this.list = roomList;
+	}
+
+	getRooms(cb){
+		fetch('/chat_rooms.json')
+		.then(function(response) {
+			return response.json();
+		})
+		.then(function(json) {
+			console.log(json, 'this is the returned json data');
+			this.setRoomList(json);
+			cb(json);
+		}.bind(this))
+		.catch(function(err) {
+			console.log('Fetch Error :-S', err);
+		});
+	}
+
+	render(el){
+		var target = document.querySelector(el + ' ul');
+		for(let i =0; i < this.list.length; i ++){
+			var li = document.createElement('li');
+			var a = document.createElement('a');
+			a.textContent = this.list[i].name;
+			a.id = this.list[i].id;
+			a.setAttribute('index', i);
+			a.setAttribute('href', '#'+this.list[i].name);
+
+			li.appendChild(a);
+			target.appendChild(li);
+		}
+	}
+
+
+}
+
+class Messages {
+	constructor(room_id, cb){
+		this.current_room_id = room_id;
+		this.getMessages(cb);
+	}
+	getMessages(cb){
+		fetch('/chat_rooms/'+ this.current_room_id +'/messages.json')
+		.then(function(response) {
+			return response.json();
+		})
+		.then(function(json) {
+			this.refreshMessageList(json)
+			cb();
+		}.bind(this))
+		.catch(function(err) {
+			console.log('Fetch Error :-S', err);
+		});
+	}
+
+	refreshMessageList(data){
+		this.messageList = data
+	}
+
+	render(el,user){
+		let target = document.querySelector(el);
+		this.messageList.forEach(function(msg){
+			let bubble = document.createElement('div');
+			let userSpan = document.createElement('span');
+			let timeSpan = document.createElement('span');
+			
+			this.bubbleDirection(bubble,msg.user_id, user.id);
+
+			bubble.setAttribute('sent-time', msg.created_at);
+			bubble.textContent = msg.content;
+
+			userSpan.className = "username";
+			timeSpan.className = "time";
+
+			userSpan.textContent = msg.user_name;
+			timeSpan.textContent = moment(msg.created_at).format('ddd HH:mm');
+			
+
+			bubble.prepend(userSpan);
+			bubble.prepend(timeSpan);
+			target.append(bubble);
+
+		}.bind(this));
+	}
+
+	bubbleDirection(div,msg_u_id, current_user_id){
+		//determines whether the message being rendered was sent by the current user. 
+		if (msg_u_id == current_user_id){
+				div.className = "bubble current";
+			} else {
+				div.className = "bubble";
+			}
+		return div;
+	}
+
+
+}
+
+app = new App({nav: '.nav', msgContainer:'.convo',message_area: '.message'});
+
+document.addEventListener("DOMContentLoaded", function(event) {
+	
+});
+
+</script>

@@ -69,3 +69,5 @@ gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 gem 'paperclip', '~> 6.0'
 
 gem 'jquery-rails', '~> 4.3', '>= 4.3.1'
+
+gem 'momentjs-rails'
