@@ -38,10 +38,14 @@ class MessagesController < ApplicationController
     respond_to do |format|
       if @message.save
 
-        @message.push_message(current_user, 'json')
-
-        format.html { redirect_to @message, notice: 'Message was successfully created.' }
-        format.json { head :created }
+        format.html { 
+          redirect_to @message, notice: 'Message was successfully created.'
+          @message.push_message(current_user, 'html')
+        }
+        format.json { 
+          @message.push_message(current_user, 'json')
+          head :created     
+        }
       else
         format.html { 
           flash[:notice] = "Unable to post message"
