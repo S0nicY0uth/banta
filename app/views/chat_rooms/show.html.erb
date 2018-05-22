@@ -48,48 +48,48 @@
     });
   });
 
-  // $(document).ready(function(){
-  //   scroll('.convo');
-  //   setInterval(refresh, 2000);
-  //   textAreaSize('.message textarea','.convo', '.message');
+  $(document).ready(function(){
+    scroll('.convo');
+    setInterval(refresh, 2000);
+    textAreaSize('.message textarea','.convo', '.message');
 
-  //   $(".message textarea").keypress(function(event) {
+    $(".message textarea").keypress(function(event) {
 
-  //     if (event.which == 13) {
-  //         event.preventDefault();         
-  //         Rails.fire(document.querySelector(".nifty_form"), 'submit');
-  //         document.querySelector(".message textarea").value = "";
-  //       }
-  //   });
+      if (event.which == 13) {
+          event.preventDefault();         
+          Rails.fire(document.querySelector(".nifty_form"), 'submit');
+          document.querySelector(".message textarea").value = "";
+        }
+    });
 
-  // });
+  });
 
-  // function textAreaSize(textarea, conversation, message){
-  //   $(textarea).bind("click", function() {
-  //     $(message).addClass('on');
-  //   });
-  //   $(conversation).bind("click", function() {
-  //     $(message).removeClass('on');
-  //   });
-  // }
+  function textAreaSize(textarea, conversation, message){
+    $(textarea).bind("click", function() {
+      $(message).addClass('on');
+    });
+    $(conversation).bind("click", function() {
+      $(message).removeClass('on');
+    });
+  }
 
-  // function scroll(div){
-  //   var objDiv = document.querySelector(div);
-  //   objDiv.scrollTop = objDiv.scrollHeight;
-  // }
+  function scroll(div){
+    var objDiv = document.querySelector(div);
+    objDiv.scrollTop = objDiv.scrollHeight;
+  }
 
-  // function refresh() {
-  //   let last_message = $('.bubble').last().attr('sent-time'); 
-  //   var chatid = <%= @chat_room.id %> 
+  function refresh() {
+    let last_message = $('.bubble').last().attr('sent-time'); 
+    var chatid = <%= @chat_room.id %> 
 
-  //   $.get('/chat_rooms/'+chatid+'/messages.html?since='+last_message, function(response){ 
-  //     $('.convo').append(response);
-  //     if (!$('.convo').is(":hover")) {
-  //       scroll('.convo');
-  //     } 
-  //   });
-  //   // setTimeout(refresh, 5000);
-  // }
+    $.get('/chat_rooms/'+chatid+'/messages.html?since='+last_message, function(response){ 
+      $('.convo').append(response);
+      if (!$('.convo').is(":hover")) {
+        scroll('.convo');
+      } 
+    });
+    // setTimeout(refresh, 5000);
+  }
 
 
   $(document).ready(function(){
