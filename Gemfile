@@ -50,6 +50,7 @@ group :development, :test do
   gem 'rails-controller-testing'
   gem 'capybara', '~> 2.7', '>= 2.7.1'
   gem 'selenium-webdriver'
+  gem 'jasmine'
 end
 
 group :development do

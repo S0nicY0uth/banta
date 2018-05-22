@@ -38,7 +38,7 @@ class MessagesController < ApplicationController
     respond_to do |format|
       if @message.save
 
-        @message.push_message(current_user)
+        @message.push_message(current_user, 'json')
 
         format.html { redirect_to @message, notice: 'Message was successfully created.' }
         format.json { head :created }
