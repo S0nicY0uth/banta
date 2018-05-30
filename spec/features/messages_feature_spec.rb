@@ -35,7 +35,7 @@ RSpec.describe "Messaging system", :type => :feature do
            expect(page).to have_text 'blah blah'
            expect(page).to have_text 'content'
         end
-        it 'the viewable messages should not include those belonging to other rooms' do
+        it 'the viewable messages should not include those belonging to other rooms', js: true do
             login(@user)
             visit chat_room_path(@chat_room)
             expect(page).not_to have_text 'lol omg m8 lolz'
@@ -43,7 +43,7 @@ RSpec.describe "Messaging system", :type => :feature do
     end
 
     describe 'sending a new message' do
-        it 'should allow me to post a new message to a chat room' do 
+        it 'should allow me to post a new message to a chat room', js: true do 
             login(@user)
             visit chat_room_path(@chat_room)
             fill_in 'content', with: "My message yo!"

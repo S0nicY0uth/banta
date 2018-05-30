@@ -1,12 +1,13 @@
 // Place all the behaviors and hooks related to the matching controller here.
 // All this logic will automatically be available in application.js.
 class App {
-	constructor(options){
-		this.init();
+	constructor(options, ready){
 		this.nav = options.nav;
 		this.msgContainer = options.msgContainer;
 		this.user = options.user_id;
 		this.message_area = options.message_area;
+		this.ready = ready
+		this.init();
 	}
 
 	init(){
@@ -16,23 +17,23 @@ class App {
 			//initialize the connection to ActionCable
 			this.ActionCableHandler = new ActionCableHandler(this.user);
 			//initial rendering
-			this.renderSearchBar(this.message_area, this.current_room_id);
 			this.roomList.render(this.nav);
 			this.createLogout(this.nav);
-
-			this.setActiveLink(document.getElementById(this.current_room_id).parentNode);
-
-			//get the inital messages
-			this.messages = new Messages(this.current_room_id, ()=>{
-				console.log(this, 'this in messages');
-				document.querySelector(this.msgContainer).innerHTML = '';
-				this.messages.render(this.msgContainer,this.user);
-				scroll('.convo');
-			});
-
-			//set the currentRoom
-			this.setRoom(this.roomList.list, this.current_room_id);
-	
+			
+			if (this.current_room_id){
+				this.setActiveLink(document.getElementById(this.current_room_id).parentNode);
+				this.renderSearchBar(this.message_area, this.current_room_id);
+				//set the currentRoom
+				this.setRoom(this.roomList.list, this.current_room_id);
+				//get the inital messages
+				this.messages = new Messages(this.current_room_id, ()=>{
+					console.log(this, 'this in messages');
+					document.querySelector(this.msgContainer).innerHTML = '';
+					this.messages.render(this.msgContainer,this.user);
+					scroll('.convo');
+				});
+			}
+			
 			this.roomList.list.forEach(function(room){
 				document.getElementById(room.id).addEventListener('click',function(e){
 					document.querySelectorAll(".nav ul li").forEach(function(li){
@@ -50,7 +51,12 @@ class App {
 					});
 				}.bind(this));
 			}.bind(this));
+			this.ready && this.ready();
 		})
+	}
+
+	onceLinkClicked(cb){
+
 	}
 
 	removeActiveLink(li){
@@ -95,7 +101,7 @@ class App {
 		form.append(textarea);
 
 		form.className = 'nifty_form';
-		form.setAttribute('data-remote','true');
+		form.method = 'POST';
 		form.setAttribute('action','/chat_rooms/'+ current_room +'/messages');
 		form.append(submit);
 
@@ -148,7 +154,11 @@ class RoomList {
 				id = this.list[i].id;
 			}
 		};
-		return id;
+		if (id > 0){
+			return id;
+		} else {
+			return false;
+		}
 	}
 
 	getRooms(cb){

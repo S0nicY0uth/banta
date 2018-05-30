@@ -8,7 +8,7 @@ class Message < ApplicationRecord
 
     def push_message(current_user, format_type)
         if format_type == 'html'
-            ActionCable.server.broadcast "MessagesChannel:#{chat_room.id}:html", message: to_html(current_user)
+            ActionCable.server.broadcast "MessagesChannel:#{chat_room.id}", message: to_html(current_user)
         else          
             ActionCable.server.broadcast "MessagesChannel:#{chat_room.id}", message: to_json
         end
