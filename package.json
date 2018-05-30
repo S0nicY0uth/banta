@@ -1,5 +1,8 @@
 {
   "name": "Banta",
   "private": true,
-  "dependencies": {}
+  "dependencies": {},
+  "devDependencies": {
+    "jasmine-ajax": "^3.4.0"
+  }
 }

@@ -31,16 +31,14 @@ class MessagesController < ApplicationController
   # POST /messages
   # POST /messages.json
   def create
-      @chat_room = ChatRoom.find(params[:chat_room_id])
-      @message = Message.new(chat_room: @chat_room, user: current_user, content: params[:content])
+    @chat_room = ChatRoom.find(params[:chat_room_id])
+    @message = Message.new(chat_room: @chat_room, user: current_user, content: params[:content])
       
-
     respond_to do |format|
       if @message.save
 
         format.html { 
-          redirect_to @message, notice: 'Message was successfully created.'
-          @message.push_message(current_user, 'html')
+          @message.push_message(current_user,'json')
         }
         format.json { 
           @message.push_message(current_user, 'json')

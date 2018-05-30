@@ -9,8 +9,28 @@ function message_subscription(room){
     },
   
     received: function(data) {
-      console.log('received', data);
-      $('.convo').append(data.message);
+      let msg = JSON.parse(data.message);
+      console.log(data);
+      let bubble = document.createElement('div');
+			let userSpan = document.createElement('span');
+			let timeSpan = document.createElement('span');
+
+      bubble.setAttribute('sent-time', msg.created_at);
+			bubble.textContent = msg.content;
+
+			userSpan.className = "username";
+      timeSpan.className = "time";
+      bubble.className = "bubble transition";
+
+			userSpan.textContent = msg.user;
+			timeSpan.textContent = moment(msg.created_at).format('ddd HH:mm');
+			
+
+			bubble.prepend(userSpan);
+			bubble.prepend(timeSpan);
+			
+      $('.convo').append(bubble);
+
       document.querySelector(".message textarea").value = "";   
       setTimeout(function(){
         $('.transition').removeClass('transition'); 
