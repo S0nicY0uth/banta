@@ -1,0 +1,2 @@
+module OauthGithubHelper
+end
