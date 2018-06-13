@@ -85,6 +85,15 @@ class App {
 		document.querySelector(nav).appendChild(div);
 	}
 
+	sendWithEnter(){
+		$(".message textarea").keypress(function(event) {
+			if (event.which == 13) {
+				event.preventDefault();         
+				Rails.fire(document.querySelector(".nifty_form"), 'submit');
+			  }
+		  });
+	}
+
 	renderSearchBar(el, current_room){
 		let target = document.querySelector(el);
 		target.innerHTML = '';
@@ -107,6 +116,8 @@ class App {
 
 
 		target.append(form);
+
+		this.sendWithEnter();
 	}
 
 	searchHandler(el,current_room){
@@ -287,7 +298,7 @@ class ActionCableHandler{
 				let msg = JSON.parse(data.message);
 				console.log('msg: user_id...', msg.user_id, 'this.user_id...', this.user_id);
 				if (msg.user_id == this.user_id){
-					let div = "<div class='bubble current'><span class='time'>"+moment(msg.created_at).format('ddd HH:mm')+"</span><span class='username'>"+msg.user+"</span>"+msg.content+"</div>";
+					let div = "<div class='bubble current transition'><span class='time'>"+moment(msg.created_at).format('ddd HH:mm')+"</span><span class='username'>"+msg.user+"</span>"+msg.content+"</div>";
 					$('.convo').append(div);
 				} else {
 					console.log('else', msg.content);

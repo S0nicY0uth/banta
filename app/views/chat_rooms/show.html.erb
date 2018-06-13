@@ -78,6 +78,6 @@
   //   // setTimeout(refresh, 5000);
   // }
   $(document).ready(function(){
-    message_subscription(<%= @chat_room.id %>)
+    message_subscription(<%= @chat_room.id %>, <%= current_user.id %>)
   });
 </script>
