@@ -94,6 +94,21 @@
             color: $black;
             }
        }
+
+       .shared-links {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            a{
+                margin-left: 5px
+            }
+
+            a:first-child {
+                margin-right: 5px;
+            }
+       }
     }
 }
 
