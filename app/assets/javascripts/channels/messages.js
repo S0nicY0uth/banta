@@ -1,4 +1,5 @@
-function message_subscription(room){
+function message_subscription(room, user_id){
+
   AppCable.messages = AppCable.cable.subscriptions.create({channel: "MessagesChannel", room: room}, {
     connected: function() {
       console.log('connected');
@@ -9,9 +10,18 @@ function message_subscription(room){
     },
   
     received: function(data) {
+      console.log(user_id, 'the user is...');
       let msg = JSON.parse(data.message);
-      console.log(data);
+      let msg_user = JSON.parse(msg.user_id);
+      console.log(msg);
       let bubble = document.createElement('div');
+
+      if (user_id == msg_user){
+        bubble.className = "bubble transition current";
+      } else {
+        bubble.className = "bubble transition";
+      }
+
 			let userSpan = document.createElement('span');
 			let timeSpan = document.createElement('span');
 
@@ -20,7 +30,6 @@ function message_subscription(room){
 
 			userSpan.className = "username";
       timeSpan.className = "time";
-      bubble.className = "bubble transition";
 
 			userSpan.textContent = msg.user;
 			timeSpan.textContent = moment(msg.created_at).format('ddd HH:mm');
